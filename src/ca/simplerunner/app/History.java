@@ -8,7 +8,6 @@ import ca.simplerunner.database.Database;
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -95,8 +94,6 @@ public class History extends ListActivity {
 		StatAdapter adp = (StatAdapter) l.getAdapter();
 		RunStat stat = adp.getItem(position);
         long runID = stat.getID();
-//        v.setBackground(getResources().getDrawable(R.drawable.selected));
-//        v.setBackgroundResource(R.drawable.selected);
         loadViewRunActivity(runID);
     }
 	

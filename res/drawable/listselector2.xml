@@ -3,5 +3,5 @@
 
     <!-- Pressed -->
     <item android:drawable="@drawable/selected" android:state_pressed="true"/>
-	<item android:drawable="@drawable/normalWhite" />
+	<item android:drawable="@drawable/shadow2" />
 </selector>

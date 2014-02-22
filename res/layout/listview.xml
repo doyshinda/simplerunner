@@ -3,7 +3,8 @@
     android:id="@+id/statView"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal" >
+    android:orientation="horizontal"
+    android:src="@drawable/shadow" >
 
     <TextView
         android:id="@+id/dateText"
