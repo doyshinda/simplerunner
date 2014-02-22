@@ -61,6 +61,7 @@ public class History extends ListActivity {
 		ListView listview = (ListView) findViewById(android.R.id.list);
 		StatAdapter adapter = new StatAdapter(this, R.layout.listview, stats);
         listview.setAdapter(adapter);
+        listview.setSelector(R.drawable.listselector);
 	}
 	
 	/*
@@ -69,7 +70,7 @@ public class History extends ListActivity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();
-		inflater.inflate(R.menu.history_action, menu);
+		inflater.inflate(R.menu.back_action, menu);
 
 		return super.onCreateOptionsMenu(menu);
 	}
@@ -94,6 +95,8 @@ public class History extends ListActivity {
 		StatAdapter adp = (StatAdapter) l.getAdapter();
 		RunStat stat = adp.getItem(position);
         long runID = stat.getID();
+//        v.setBackground(getResources().getDrawable(R.drawable.selected));
+//        v.setBackgroundResource(R.drawable.selected);
         loadViewRunActivity(runID);
     }
 	
@@ -126,10 +129,10 @@ public class History extends ListActivity {
 	        }
 	        
 	        if(position % 2 == 0) {
-	        	layout.setBackgroundColor(getResources().getColor(R.color.blue2));
+	        	layout.setBackgroundResource(R.drawable.listselector);
 	        }
 	        else {
-	        	layout.setBackgroundColor(Color.WHITE);
+	        	layout.setBackgroundResource(R.drawable.listselector2);
 	        }
 
 	        TextView dateText = (TextView) layout.findViewById(R.id.dateText);

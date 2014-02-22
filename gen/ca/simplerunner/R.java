@@ -224,13 +224,18 @@ containing a value of this type.
         public static final int ic_plusone_small_off_client=0x7f02001e;
         public static final int ic_plusone_standard_off_client=0x7f02001f;
         public static final int ic_plusone_tall_off_client=0x7f020020;
-        public static final int logo=0x7f020021;
-        public static final int trash_pressed=0x7f020022;
+        public static final int listselector=0x7f020021;
+        public static final int listselector2=0x7f020022;
+        public static final int logo=0x7f020023;
+        public static final int normal=0x7f020026;
+        public static final int normalWhite=0x7f020027;
+        public static final int selected=0x7f020025;
+        public static final int trash_pressed=0x7f020024;
     }
     public static final class id {
         public static final int GPSstatus=0x7f060008;
-        public static final int action_back=0x7f06002b;
-        public static final int action_history=0x7f06002a;
+        public static final int action_back=0x7f06002a;
+        public static final int action_history=0x7f06002b;
         public static final int avgPaceField=0x7f060024;
         public static final int avgSpeedField=0x7f060028;
         public static final int buttonDivider=0x7f060018;
@@ -287,8 +292,8 @@ containing a value of this type.
         public static final int splitview=0x7f030007;
     }
     public static final class menu {
-        public static final int default_action=0x7f0a0000;
-        public static final int history_action=0x7f0a0001;
+        public static final int back_action=0x7f0a0000;
+        public static final int default_action=0x7f0a0001;
     }
     public static final class string {
         public static final int GPSoff=0x7f070028;

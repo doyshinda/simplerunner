@@ -7,5 +7,8 @@
     <color name="blue2">#00B4FF</color>
     <color name="gray">#EEEEEE</color>
     <color name="white">#FFFFFF</color>
+    <drawable name="selected">#EEEEEE</drawable>
+    <drawable name="normal">@color/blue2</drawable>
+    <drawable name="normalWhite">@color/white</drawable>
 </resources>
 <!-- 00c1ff -->

@@ -88,7 +88,7 @@ LocationListener, GpsStatus.Listener {
 		super.onResume();
 		gpsOn();
 	}
-	
+
 	/*
 	 * Populate Action bar with menu
 	 */
@@ -199,7 +199,7 @@ LocationListener, GpsStatus.Listener {
 			}).start();
 		}
 	}
-	
+
 	/*
 	 * Begin logging GPS coordinates
 	 */
@@ -213,7 +213,7 @@ LocationListener, GpsStatus.Listener {
 			timer.start();
 		}
 	}
-	
+
 	/*
 	 * Pause logging GPS coordinates
 	 */
@@ -234,26 +234,30 @@ LocationListener, GpsStatus.Listener {
 		logging = false;
 		String date = new Date().toString();
 		if(!pace.contentEquals("00:00")) {
-			long statsID = db.addRunStats(date, pace, distance, Long.toString(runLength));
+			final long statsID = db.addRunStats(date, pace, distance, Long.toString(runLength));
+			new Thread(new Runnable() {
+				public void run() {
+					for(Location l : locations) {
+						db.insertLocation(statsID, l.getLatitude(), l.getLongitude());
+					}
+				}
+			}).start();	
 			reset();
-			for(Location l : locations) {
-				db.insertLocation(statsID, l.getLatitude(), l.getLongitude());
-			}
-			loadViewRunActivity(statsID);
+			loadRunViewActivity(statsID);
 		}
 		reset();
 	}
-	
+
 	/*
 	 * Load View Run
 	 */
-	public void loadViewRunActivity(long runID) {
+	public void loadRunViewActivity(long runID) {
 		db.closeDB();
-		Intent i = new Intent(Main.this, ViewRun.class);
+		Intent i = new Intent(Main.this, RunView.class);
 		i.putExtra("runID", runID);
 		startActivity(i);
 	}
-	
+
 	/*
 	 * Reset app with default values
 	 */
@@ -337,11 +341,11 @@ LocationListener, GpsStatus.Listener {
 		gpsStatus.setBackgroundColor(this.getResources().getColor(R.color.green));
 		gpsStatus.setText(this.getResources().getString(R.string.GPSon));
 	}
-	
+
 	/*
 	 * Update the GPS Icon to red
 	 */
-	public void redLightGps() {
+	private void redLightGps() {
 		gpsConnected = false;
 		gpsStatus.setBackgroundColor(this.getResources().getColor(R.color.red));
 		gpsStatus.setText(this.getResources().getString(R.string.GPSoff));
@@ -350,20 +354,28 @@ LocationListener, GpsStatus.Listener {
 	/*
 	 * Update the app with the newest location
 	 */
-	private void update(Location loc) {
+	private void update(final Location loc) {
 		locations.add(loc);
 		// Calculate distance run
-		if(prev != null) {
-			Location.distanceBetween(prev.getLatitude(), prev.getLongitude(),
-					loc.getLatitude(), loc.getLongitude(), results);
-			distance += results[0];
-		}
-		prev = loc;
-		double speed = calculateSpeed();
-		pace = calculatePace(speed);
-		speedField.setText(formatSpeed(speed));
-		paceField.setText(pace);
-		distanceField.setText(formatDistance(distance));		
+		new Thread(new Runnable() {
+			public void run() {
+				if(prev != null) {
+					Location.distanceBetween(prev.getLatitude(), prev.getLongitude(),
+							loc.getLatitude(), loc.getLongitude(), results);
+					distance += results[0];
+				}
+				prev = loc;
+				final double speed = calculateSpeed();
+				pace = calculatePace(speed);
+				runOnUiThread(new Runnable() {
+					public void run() {
+						speedField.setText(formatSpeed(speed));
+						paceField.setText(pace);
+						distanceField.setText(formatDistance(distance));
+					}
+				});
+			}
+		}).start();		
 	}
 
 	/*
@@ -371,9 +383,7 @@ LocationListener, GpsStatus.Listener {
 	 */
 	@Override
 	public void onConnected(Bundle connectionHint) {
-		locationClient.requestLocationUpdates(
-				REQUEST,
-				this);
+		locationClient.requestLocationUpdates(REQUEST, this);
 	}
 
 	/*
@@ -399,17 +409,17 @@ LocationListener, GpsStatus.Listener {
 		boolean isOn = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
 		return isOn;
 	}
-	
+
 	/*
 	 * Calculates the speed based on time running and distance covered
 	 */
-	public double calculateSpeed() {
+	private double calculateSpeed() {
 		long currTime = SystemClock.elapsedRealtime();
 		long delta = currTime - startTime;
 		double speed = (distance * 3600)/delta;
 		return speed;
 	}
-	
+
 	/*
 	 * Convert the speed double to string with units per hour
 	 */
@@ -418,7 +428,7 @@ LocationListener, GpsStatus.Listener {
 		String speedStr = f.format(speed);
 		return speedStr + " km/h";
 	}
-	
+
 	/*
 	 * Format the distance to the appropriate units
 	 */
@@ -427,11 +437,11 @@ LocationListener, GpsStatus.Listener {
 		String distStr = f.format(distance/1000);
 		return distStr + " km";
 	}
-	
+
 	/*
 	 * Calculates the pace based on speed and time
 	 */
-	public String calculatePace(double speed) {
+	private String calculatePace(double speed) {
 		double pace = 1/speed * 60;
 		int minutes = (int) Math.floor(pace);
 		int seconds = (int) ((pace - Math.floor(pace)) * 60);

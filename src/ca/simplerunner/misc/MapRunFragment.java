@@ -44,18 +44,26 @@ public class MapRunFragment extends Fragment {
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		if (map != null)
 			setUpMap();
-		setUpMapIfNeeded();
+		else
+			setUpMapIfNeeded();
 	}
 
+	/*
+	 * Plot the run on the Map
+	 */
 	public void setUpMap() {
 		ArrayList<LatLng> coords = db.getRunCoordinates(runID);
 		PolylineOptions opts = new PolylineOptions();
+		opts.width(10);
 		opts.addAll(coords);
 		int mid = coords.size()/2;
 		map.moveCamera(CameraUpdateFactory.newLatLngZoom(coords.get(mid), 15));
 		map.addPolyline(opts);
 	}
 
+	/*
+	 * Try to instantiate the map
+	 */
 	public void tryGetMap() {
 		map = ((SupportMapFragment) getActivity().getSupportFragmentManager()
 				.findFragmentById(R.id.map)).getMap();
