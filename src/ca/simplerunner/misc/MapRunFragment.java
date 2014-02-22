@@ -19,7 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 public class MapRunFragment extends Fragment {
-	
+
 	Database db;
 	RunStat stat;
 	RunView parent;
@@ -27,8 +27,8 @@ public class MapRunFragment extends Fragment {
 	GoogleMap map;
 
 	@Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState) {
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
 		super.onCreateView(inflater, container, savedInstanceState);
 		View myView = inflater.inflate(R.layout.mapview, container, false);
 		parent = (RunView) getActivity();
@@ -36,17 +36,17 @@ public class MapRunFragment extends Fragment {
 		db = new Database(parent);
 		stat = db.getRunStat(runID);
 		setUpMapIfNeeded();
- 
-        return myView;
-    }
-	
+
+		return myView;
+	}
+
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
-	    if (map != null)
-	        setUpMap();
-	    setUpMapIfNeeded();
+		if (map != null)
+			setUpMap();
+		setUpMapIfNeeded();
 	}
-	
+
 	public void setUpMap() {
 		ArrayList<LatLng> coords = db.getRunCoordinates(runID);
 		PolylineOptions opts = new PolylineOptions();
@@ -55,27 +55,27 @@ public class MapRunFragment extends Fragment {
 		map.moveCamera(CameraUpdateFactory.newLatLngZoom(coords.get(mid), 15));
 		map.addPolyline(opts);
 	}
-	
+
 	public void tryGetMap() {
 		map = ((SupportMapFragment) getActivity().getSupportFragmentManager()
 				.findFragmentById(R.id.map)).getMap();
 	}
-	
+
 	public void setUpMapIfNeeded() {
-	    if (map == null) {
-	        tryGetMap();
-	        if (map != null) {
-	        	setUpMap();
-	        }
-	    }
+		if (map == null) {
+			tryGetMap();
+			if (map != null) {
+				setUpMap();
+			}
+		}
 	}
-		
+
 	@Override
 	public void onDestroyView() {
 		super.onDestroyView();
 		db.closeDB();
 		if(!parent.isFinishing())
 			parent.removeMapFragment();
-	    map = null;
+		map = null;
 	}
 }
