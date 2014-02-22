@@ -1,0 +1,24 @@
+<resources>
+
+    <string name="app_name">Simple Runner</string>
+    <string name="history">History</string>
+    <string name="back">Back</string>
+    <string name="start">Start</string>
+    <string name="stop">Stop</string>
+    <string name="pause">Pause</string>
+    <string name="zeroDistance">0.00</string>
+    <string name="zeroTime">00:00</string>
+    <string name="zeroPace">00:00</string>
+    <string name="zeroSpeed">0.00</string>
+    <string name="pace">Pace</string>
+    <string name="speed">Speed</string>
+    <string name="time">Time</string>
+    <string name="distance">Distance</string>
+    <string name="GPSoff">GPS Not Connected</string>
+    <string name="GPSon">GPS Connected</string>
+    <string name="distHeader">DISTANCE</string>
+    <string name="timeHeader">TIME</string>
+    <string name="avgPace">AVG PACE</string>
+    <string name="avgSpeed">AVG SPEED</string>
+    <string name="date">date</string>
+</resources>
