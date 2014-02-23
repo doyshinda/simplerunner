@@ -25,6 +25,7 @@ import android.widget.TextView;
  * to the user.
  * 
  * @author Abe Friesen
+ * 
  */
 public class History extends ListActivity {
 
@@ -86,6 +87,9 @@ public class History extends ListActivity {
 		}
 	}
 
+	/*
+	 * Handle list item chosen
+	 */
 	@Override 
 	public void onListItemClick(ListView l, View v, int position, long id) {
 		StatAdapter adp = (StatAdapter) l.getAdapter();
@@ -94,6 +98,9 @@ public class History extends ListActivity {
 		loadViewRunActivity(runID);
 	}
 
+	/*
+	 * Load the ViewRun Activity for a particular run
+	 */
 	public void loadViewRunActivity(long runID) {
 		db.closeDB();
 		Intent i = new Intent(History.this, RunView.class);
@@ -101,6 +108,9 @@ public class History extends ListActivity {
 		startActivity(i);
 	}
 
+	/**
+	 * Custom Adapter used to populate a list view with Run Statistic values
+	 */
 	private class StatAdapter extends ArrayAdapter<RunStat> {
 
 		private LayoutInflater inflater;

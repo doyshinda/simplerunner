@@ -21,4 +21,6 @@
     <string name="avgPace">AVG PACE</string>
     <string name="avgSpeed">AVG SPEED</string>
     <string name="date">date</string>
+    <string name="kmHeader">KM</string>
+    <string name="splitTimeHeader">Split Time</string>
 </resources>

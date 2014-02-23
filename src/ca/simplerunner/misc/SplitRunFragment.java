@@ -18,56 +18,62 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+/**
+ * This class handles creating the Split view as shown
+ * in the RunView Activity on the 'Split' tab
+ * 
+ * @author Abe Friesen
+ * 
+ */
 public class SplitRunFragment extends Fragment {
-	
+
 	Database db;
 	RunStat stat;
 	long runID;
-	RunView parent;
-	View myView;
-	
+
 	@Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState) {
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
 		super.onCreateView(inflater, container, savedInstanceState);
- 
-        myView = inflater.inflate(R.layout.splitview, container, false);
-        parent = (RunView) getActivity();
+
+		View myView = inflater.inflate(R.layout.splitview, container, false);
+		RunView parent = (RunView) getActivity();
 		runID = parent.getRunID();
 		db = new Database(parent);
 		stat = db.getRunStat(runID);
 		TextView dateHeader = (TextView) myView.findViewById(R.id.splitDateHeader);
 		dateHeader.setText(stat.getDate());
-		populateListView();
+		populateListView(myView);
 		return myView;
-    }
-	
+	}
+
 	/*
 	 * Populate the list view with run split values
 	 */
-	private void populateListView() {
+	private void populateListView(View myView) {
 		ArrayList<LocationStat> locStats = db.getRunCoordinates(runID);
 		ArrayList<SplitStat> splits = createSplits(locStats);
-		
+
 		SplitAdapter adapter = new SplitAdapter(getActivity(), R.layout.splitlistview, splits);
 
 		ListView listview = (ListView) myView.findViewById(android.R.id.list);
 		listview.setAdapter(adapter);
 	}
-	
+
 	/*
 	 * Create the split values based on the run stats
 	 */
 	private ArrayList<SplitStat> createSplits(ArrayList<LocationStat> locStats) {
+		ArrayList<SplitStat> splitStats = new ArrayList<SplitStat>();
+
 		double prevLat = locStats.get(0).getLat();
 		double prevLng = locStats.get(0).getLng();
-		long initTime = locStats.get(0).getTimestamp();
+		long prevTime = locStats.get(0).getTimestamp();
 		long totalTime = 0;
 		float[] results = new float[1];
 		double distance = 0.0;
-		ArrayList<SplitStat> splitStats = new ArrayList<SplitStat>();
 		double km = 0;
-		
+
 		for(int i = 1; i < locStats.size(); i++) {
 			double currLat = locStats.get(i).getLat();
 			double currLng = locStats.get(i).getLng();
@@ -78,61 +84,82 @@ public class SplitRunFragment extends Fragment {
 			if(distance >= 1000) {
 				km += 1;
 				distance = distance - 1000;
-				long splitLength = locStats.get(i).getTimestamp() - initTime;
+				long splitLength = locStats.get(i).getTimestamp() - prevTime;
+				System.out.println(splitLength);
 				totalTime += splitLength;
-				String timeStr = String.valueOf(splitLength);
-				timeStr = MainRunFragment.formatTime(timeStr);
+				String timeStr = formatSplitTime(splitLength);
 				splitStats.add(new SplitStat(km, timeStr));
-				initTime = locStats.get(i).getTimestamp();
-				prevLat = currLat;
-				prevLng = currLng;
+				prevTime = locStats.get(i).getTimestamp();
 			}
 		}
 		if(distance > 0) {
 			int lastIndex = locStats.size() - 1;
-			long splitLength = locStats.get(lastIndex).getTimestamp() - initTime;
-			long time = Long.valueOf(stat.getTime());
+			long splitLength = locStats.get(lastIndex).getTimestamp() - prevTime;
 			totalTime += splitLength;
+			long time = Long.valueOf(stat.getTime());
 			splitLength += (time - totalTime);
-			String timeStr = String.valueOf(splitLength);
-			timeStr = MainRunFragment.formatTime(timeStr);
-			DecimalFormat df = new DecimalFormat("##.##");
-			String formatted = df.format(distance/1000);
-			splitStats.add(new SplitStat(Double.valueOf(formatted), timeStr));
+			String timeStr = formatSplitTime(splitLength);
+			double lastKM = formatLastSplit(distance) + km;
+			splitStats.add(new SplitStat(lastKM, timeStr));
 		}
-		
+
 		return splitStats;
 	}
-	
+
+	/*
+	 * Format the distance of the last split of the run
+	 * into a 2 decimal double value
+	 */
+	private double formatLastSplit(double distance) {
+		DecimalFormat df = new DecimalFormat("##.##");
+		String formatted = df.format(distance/1000);
+		return Double.valueOf(formatted);
+	}
+
+	/*
+	 * Format the time of the split into a human readable
+	 * time
+	 */
+	private String formatSplitTime(long splitLength) {
+		String timeStr = String.valueOf(splitLength);
+		return MainRunFragment.formatTime(timeStr);
+	}
+
 	@Override
 	public void onDestroyView() {
 		super.onDestroyView();
 		db.closeDB();
 	}
-	
+
+	/**
+	 * Private class for Split Statistics
+	 */
 	private class SplitStat {
-		
+
 		double km;
 		String split;
-		
+
 		public SplitStat(double km, String split) {
 			this.km = km;
 			this.split = split;
 		}
-		
+
 		public double getkm() {
 			return this.km;
 		}
-		
+
 		public String getSplit() {
 			return this.split;
 		}
 	}
-	
+
+	/**
+	 * Custom Adapter used to populate a list view with Split Statistic values
+	 */
 	private class SplitAdapter extends ArrayAdapter<SplitStat> {
 
 		private LayoutInflater inflater;
-		public SplitAdapter(Context context, int textViewResourceId,	List<SplitStat> objects) {
+		public SplitAdapter(Context context, int textViewResourceId, List<SplitStat> objects) {
 			super(context, textViewResourceId, objects);
 			inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		}
@@ -149,13 +176,6 @@ public class SplitRunFragment extends Fragment {
 				layout = inflater.inflate(R.layout.splitlistview, null);
 			}
 
-//			if(position % 2 == 0) {
-//				layout.setBackgroundResource(R.drawable.listselector);
-//			}
-//			else {
-//				layout.setBackgroundResource(R.drawable.listselector2);
-//			}
-
 			TextView kmText = (TextView) layout.findViewById(R.id.km);
 			TextView splitText = (TextView) layout.findViewById(R.id.splitTime);
 
@@ -165,5 +185,4 @@ public class SplitRunFragment extends Fragment {
 			return layout;
 		}
 	}
-
 }

@@ -4,8 +4,8 @@
     android:layout_height="match_parent" >
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical" >
 
         <TextView
@@ -19,10 +19,44 @@
             android:textAppearance="?android:attr/textAppearanceLarge" />
 
         <TextView
-            android:id="@+id/someDivider"
             android:layout_width="fill_parent"
             android:layout_height="1dp"
             android:background="@color/black" />
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:id="@+id/kmHeader"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@color/blue2"
+                android:gravity="center|center_vertical"
+                android:text="@string/kmHeader"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColorHint="@color/black" />
+
+            <TextView
+                android:id="@+id/splitTimeHeader"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@color/blue2"
+                android:gravity="center|center_vertical"
+                android:text="@string/splitTimeHeader"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColorHint="@color/black" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="3dp"
+            android:background="@color/gray"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp" />
 
         <ListView
             android:id="@android:id/list"
@@ -30,17 +64,16 @@
             android:layout_height="match_parent"
             android:layout_margin="5dp"
             android:divider="@color/gray"
-            android:dividerHeight="3dp"
-            android:listSelector="@drawable/listselector" >
+            android:dividerHeight="3dp" >
         </ListView>
     </LinearLayout>
-    
+
     <TextView
         android:layout_width="15dp"
         android:layout_height="fill_parent"
         android:layout_gravity="left"
         android:background="@drawable/fadebgleft" />
-    
+
     <TextView
         android:layout_width="15dp"
         android:layout_height="fill_parent"

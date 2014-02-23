@@ -55,12 +55,6 @@
             android:screenOrientation="portrait" >            
         </activity>
         
-        <!-- ViewRun Activity -->
-        <activity
-            android:name="ca.simplerunner.app.ViewRun"
-            android:screenOrientation="portrait" >
-        </activity>
-        
         <!-- RunView Activity -->
         <activity
             android:name="ca.simplerunner.app.RunView"

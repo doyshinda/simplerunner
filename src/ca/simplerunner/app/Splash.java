@@ -10,6 +10,7 @@ import android.os.Handler;
  * Splash screen activity class. The first thing the user sees.
  * 
  * @author Abe Friesen
+ * 
  */
 public class Splash extends Activity {
 	

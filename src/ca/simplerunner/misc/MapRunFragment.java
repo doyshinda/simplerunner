@@ -17,6 +17,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+/**
+ * This class handles creating the Map view as shown
+ * in the RunView Activity on the 'Map' tab
+ * 
+ * @author Abe Friesen
+ * 
+ */
 public class MapRunFragment extends Fragment {
 
 	Database db;
@@ -72,6 +79,9 @@ public class MapRunFragment extends Fragment {
 				.findFragmentById(R.id.map)).getMap();
 	}
 
+	/*
+	 * Set up the map if possible
+	 */
 	public void setUpMapIfNeeded() {
 		if (map == null) {
 			tryGetMap();

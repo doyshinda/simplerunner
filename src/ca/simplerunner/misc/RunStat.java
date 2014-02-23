@@ -5,13 +5,23 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+/**
+ * This class represents a Run Statistic, including:
+ * @date - the date of the run
+ * @pace - the pace of the run
+ * @time - the total time of the run
+ * @distance - the distance of the run
+ * 
+ * @author Abe Friesen
+ *
+ */
 public class RunStat {
 	
-	public String pace;
-	public String time;
-	public long id;
-	public double distance;
-	public String date;
+	private String pace;
+	private String time;
+	private long id;
+	private double distance;
+	private String date;
 	
 	public RunStat(String date, long id, String pace, String time, double distance) {
 		this.date = date;

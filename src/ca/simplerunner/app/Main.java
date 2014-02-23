@@ -38,6 +38,14 @@ import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.TextView;
 
+/**
+ * The Main Activity of the app. Responsible for logging
+ * GPS coordinates, timing the run and updating the UI
+ * with relevant run information
+ * 
+ * @author Abe Friesen
+ *
+ */
 public class Main extends Activity
 implements ConnectionCallbacks, OnConnectionFailedListener,
 LocationListener, GpsStatus.Listener {
@@ -63,8 +71,7 @@ LocationListener, GpsStatus.Listener {
 	private String pace = "00:00";
 	private float[] results;
 
-	// These settings are the same as the settings for the map. They will in fact give you updates
-	// at the maximal rates currently possible.
+	// These settings will get updates at the maximal rates currently possible.
 	private static final LocationRequest REQUEST = LocationRequest.create()
 			.setInterval(5000)         // 5 seconds
 			.setFastestInterval(16)    // 16ms = 60fps
@@ -140,7 +147,6 @@ LocationListener, GpsStatus.Listener {
 		});
 
 		stopButton.setOnClickListener(new View.OnClickListener() {
-
 			@Override
 			public void onClick(View v) {
 				recordRun();				
@@ -148,7 +154,6 @@ LocationListener, GpsStatus.Listener {
 		});
 
 		pauseButton.setOnClickListener(new View.OnClickListener() {
-
 			@Override
 			public void onClick(View arg0) {
 				pauseLogging();
@@ -156,6 +161,9 @@ LocationListener, GpsStatus.Listener {
 		});
 	}
 
+	/*
+	 * Go to the nearest location of the phone as possible
+	 */
 	private void goToMyLocation() {
 		if(!gpsOn()) {
 			showGpsDisabledAlert();
@@ -177,7 +185,6 @@ LocationListener, GpsStatus.Listener {
 	private void initLogging() {
 		//Wait for the GPS to connect
 		if(!logging) {
-			gpsConnected = true;
 			final ProgressDialog progress = new ProgressDialog(Main.this);
 			progress.setTitle("Waiting for GPS");
 			progress.setMessage("Waiting for GPS connection to be established.");
@@ -235,14 +242,7 @@ LocationListener, GpsStatus.Listener {
 		logging = false;
 		String date = new Date().toString();
 		if(!pace.contentEquals("00:00")) {
-			final long statsID = db.addRunStats(date, pace, distance, Long.toString(runLength));
-//			new Thread(new Runnable() {
-//				public void run() {
-//					for(Location l : locations) {
-//						db.insertLocation(statsID, l.getLatitude(), l.getLongitude(), l.getTime());
-//					}
-//				}
-//			}).start();	
+			long statsID = db.addRunStats(date, pace, distance, Long.toString(runLength));
 			for(Location l : locations) {
 				db.insertLocation(statsID, l.getLatitude(), l.getLongitude(), l.getTime());
 			}
@@ -383,16 +383,15 @@ LocationListener, GpsStatus.Listener {
 	}
 
 	/*
-	 * Callback called when connected.
+	 * Called when Location connected.
 	 */
 	@Override
 	public void onConnected(Bundle connectionHint) {
-		locationClient.setMockMode(true);
 		locationClient.requestLocationUpdates(REQUEST, this);
 	}
 
 	/*
-	 * Callback called when disconnected.
+	 * Called when Location disconnected.
 	 */
 	@Override
 	public void onDisconnected() {
@@ -416,7 +415,7 @@ LocationListener, GpsStatus.Listener {
 	}
 
 	/*
-	 * Calculates the speed based on time running and distance covered
+	 * Calculates the speed based on time running and distance
 	 */
 	private double calculateSpeed() {
 		long currTime = SystemClock.elapsedRealtime();

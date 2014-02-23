@@ -4,6 +4,12 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+/**
+ * Custom class for swiping between tabs
+ * 
+ * @author Abe Friesen
+ *
+ */
 public class TabsPagerAdapter extends FragmentPagerAdapter {
 	
     public TabsPagerAdapter(FragmentManager fm) {
@@ -15,21 +21,23 @@ public class TabsPagerAdapter extends FragmentPagerAdapter {
  
         switch (index) {
         case 0:
-            // Main run fragment activity
+            // Main run fragment
             return new MainRunFragment();
         case 1:
-            // Split run activity
+            // Split run fragment
             return new SplitRunFragment();
         case 2:
-            // Map run fragment activity
+            // Map run fragment
             return new MapRunFragment();
         }
         return null;
     }
  
+    /*
+     * Return the number of tabs
+     */
     @Override
     public int getCount() {
         return 3;
     }
-
 }

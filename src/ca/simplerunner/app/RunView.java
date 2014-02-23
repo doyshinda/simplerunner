@@ -10,11 +10,20 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
-import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
+/**
+ * This Activity is responsible for showing detailed views
+ * of a run, including:
+ * The Map showing where the user ran
+ * Split table showing split times for each km
+ * Main View showing avg pace, avg speed, time and distance
+ * 
+ * @author Abe Friesen
+ *
+ */
 public class RunView extends FragmentActivity implements ActionBar.TabListener {
 
 	ViewPager viewPager;

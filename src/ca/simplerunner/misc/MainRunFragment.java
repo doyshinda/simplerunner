@@ -11,6 +11,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+/**
+ * This class handles creating the Main view as shown
+ * in the RunView Activity on the 'Main' tab
+ * 
+ * @author Abe Friesen
+ * 
+ */
 public class MainRunFragment extends Fragment {
 	
 	Database db;
@@ -25,20 +32,27 @@ public class MainRunFragment extends Fragment {
 		long runID = parent.getRunID();
 		db = new Database(parent);
 		stat = db.getRunStat(runID);
+		init(myView); 
+        return myView;
+    }
+	
+	/*
+	 * Initiate the text views
+	 */
+	private void init(View myView) {
 		TextView dateHeader = (TextView) myView.findViewById(R.id.dateHeader);
 		TextView timeField = (TextView) myView.findViewById(R.id.tmeField);
 		TextView distanceField = (TextView) myView.findViewById(R.id.distField);
 		TextView avgPace = (TextView) myView.findViewById(R.id.avgPaceField);
 		TextView avgSpeed = (TextView) myView.findViewById(R.id.avgSpeedField);
+		
 		dateHeader.setText(stat.getDate());
 		timeField.setText(formatTime(stat.getTime()));
 		distanceField.setText(Main.formatDistance(stat.getDistance()));
-		String avgSpeedStr = calcAvgSpeed(stat.getTime(), stat.distance);
+		String avgSpeedStr = calcAvgSpeed(stat.getTime(), stat.getDistance());
 		avgPace.setText(calcAvgPace(avgSpeedStr));
 		avgSpeed.setText(avgSpeedStr);
- 
-        return myView;
-    }
+	}
 	
 	@Override
 	public void onDestroyView() {
@@ -47,7 +61,7 @@ public class MainRunFragment extends Fragment {
 	}
 	
 	/*
-	 * Calculate the Average Speed
+	 * Calculate the average speed
 	 */
 	public String calcAvgSpeed(String time, double distance) {
 		double speed = (distance * 3600)/Double.valueOf(time);
@@ -55,7 +69,7 @@ public class MainRunFragment extends Fragment {
 	}
 	
 	/*
-	 * Calculates the average pace
+	 * Calculate the average pace
 	 */
 	public String calcAvgPace(String speedStr) {
 		speedStr = speedStr.replace(" km/h", "");
