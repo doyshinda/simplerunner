@@ -5,6 +5,7 @@ import java.util.List;
 
 import ca.simplerunner.R;
 import ca.simplerunner.database.Database;
+import ca.simplerunner.misc.RunStat;
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
@@ -26,43 +27,39 @@ import android.widget.TextView;
  * @author Abe Friesen
  */
 public class History extends ListActivity {
-	
+
 	Database db;
-	
+	StatAdapter adapter;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.history);
-        db = new Database(this);
-        getPastRuns();
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.history);
+		db = new Database(this);
+		populateListView();
 	}
-	
+
 	/*
-	 * Retrieve past runs from database
+	 * Populate list view with past runs from database
 	 */
-	private void getPastRuns() {
+	private void populateListView() {
+		adapter = new StatAdapter(this, R.layout.listview, new ArrayList<RunStat>());
 		new Thread(new Runnable() {
 			public void run() {
-				final ArrayList<RunStat> stats = db.getRunStats();
+				ArrayList<RunStat> stats = db.getRunStats();
+				adapter.addAll(stats);
 				runOnUiThread(new Runnable() {
 					public void run() {
-						populateListView(stats);
+						adapter.notifyDataSetChanged();
 					}
 				});
 			}
 		}).start();
-	}
-	
-	/*
-	 * Populate the list view with past runs
-	 */
-	private void populateListView(ArrayList<RunStat> stats) {
 		ListView listview = (ListView) findViewById(android.R.id.list);
-		StatAdapter adapter = new StatAdapter(this, R.layout.listview, stats);
-        listview.setAdapter(adapter);
-        listview.setSelector(R.drawable.listselector);
+		listview.setAdapter(adapter);
+		listview.setSelector(R.drawable.listselector);
 	}
-	
+
 	/*
 	 * Populate Action bar with menu
 	 */
@@ -73,7 +70,7 @@ public class History extends ListActivity {
 
 		return super.onCreateOptionsMenu(menu);
 	}
-	
+
 	/*
 	 * Handle menu item chosen
 	 */
@@ -88,22 +85,22 @@ public class History extends ListActivity {
 			return false;
 		}
 	}
-	
+
 	@Override 
-    public void onListItemClick(ListView l, View v, int position, long id) {
+	public void onListItemClick(ListView l, View v, int position, long id) {
 		StatAdapter adp = (StatAdapter) l.getAdapter();
 		RunStat stat = adp.getItem(position);
-        long runID = stat.getID();
-        loadViewRunActivity(runID);
-    }
-	
+		long runID = stat.getID();
+		loadViewRunActivity(runID);
+	}
+
 	public void loadViewRunActivity(long runID) {
 		db.closeDB();
 		Intent i = new Intent(History.this, RunView.class);
 		i.putExtra("runID", runID);
 		startActivity(i);
 	}
-	
+
 	private class StatAdapter extends ArrayAdapter<RunStat> {
 
 		private LayoutInflater inflater;
@@ -112,33 +109,33 @@ public class History extends ListActivity {
 			super(context, textViewResourceId, objects);
 			inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		}
-		
+
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent){
-			
+
 			View layout = convertView;
 			RunStat stat = getItem(position);
-			
-	        //Inflate the view
-	        if(convertView==null)
-	        {
-	        	layout = inflater.inflate(R.layout.listview, null);
-	        }
-	        
-	        if(position % 2 == 0) {
-	        	layout.setBackgroundResource(R.drawable.listselector);
-	        }
-	        else {
-	        	layout.setBackgroundResource(R.drawable.listselector2);
-	        }
 
-	        TextView dateText = (TextView) layout.findViewById(R.id.dateText);
-	        TextView distanceText = (TextView) layout.findViewById(R.id.distanceText);
+			//Inflate the view
+			if(convertView==null)
+			{
+				layout = inflater.inflate(R.layout.listview, null);
+			}
 
-	        dateText.setText(stat.getDate());
-	        distanceText.setText(Main.formatDistance(stat.getDistance()));
+			if(position % 2 == 0) {
+				layout.setBackgroundResource(R.drawable.listselector);
+			}
+			else {
+				layout.setBackgroundResource(R.drawable.listselector2);
+			}
 
-	        return layout;
-	    }
+			TextView dateText = (TextView) layout.findViewById(R.id.dateText);
+			TextView distanceText = (TextView) layout.findViewById(R.id.distanceText);
+
+			dateText.setText(stat.getDate());
+			distanceText.setText(Main.formatDistance(stat.getDistance()));
+
+			return layout;
+		}
 	}
 }

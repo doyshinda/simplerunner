@@ -22,6 +22,7 @@ public class DBHelper extends SQLiteOpenHelper {
 	public static final String PACE = "pace";
 	public static final String DISTANCE = "distance";
 	public static final String TIME = "time";
+	public static final String TIMESTAMP = "loctime";
 	public static final String DATETIME = "datetime";
 	public static int DATABASE_VERSION = 6;
 	
@@ -49,6 +50,7 @@ public class DBHelper extends SQLiteOpenHelper {
 		sb.append(STATS_ID + " INTEGER NOT NULL, ");
 		sb.append(LAT + " REAL NOT NULL, ");
 		sb.append(LNG + " REAL NOT NULL, ");
+		sb.append(TIMESTAMP + " REAL NOT NULL, ");
 		sb.append("FOREIGN KEY(" + STATS_ID + ") REFERENCES ");
 		sb.append(LOC_TABLE + "(" + STATS_ID + ")");		
 		sb.append(");");

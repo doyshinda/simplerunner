@@ -2,9 +2,8 @@ package ca.simplerunner.database;
 
 import java.util.ArrayList;
 
-import ca.simplerunner.app.RunStat;
-
-import com.google.android.gms.maps.model.LatLng;
+import ca.simplerunner.misc.LocationStat;
+import ca.simplerunner.misc.RunStat;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -37,20 +36,22 @@ public class Database {
 	
 	/*
 	 * Query the database for the lat and lng coordinates
-	 * for run with <statsID>. Returns list of LatLng
+	 * and timestamps for run with <statsID>. Returns list of LatLng
 	 */
-	public ArrayList<LatLng> getRunCoordinates(long statsID) {
-		Cursor cursor = db.query(DBHelper.LOC_TABLE, new String[]{DBHelper.LAT, DBHelper.LNG}, 
+	public ArrayList<LocationStat> getRunCoordinates(long statsID) {
+		Cursor cursor = db.query(DBHelper.LOC_TABLE, new String[]{DBHelper.LAT, DBHelper.LNG, DBHelper.TIMESTAMP}, 
 				DBHelper.STATS_ID + " = ?", 
 				new String[]{String.valueOf(statsID)}, null, null, null);
 		
-		ArrayList<LatLng> locations = new ArrayList<LatLng>();
+		ArrayList<LocationStat> locations = new ArrayList<LocationStat>();
 		
 		cursor.moveToFirst();
 		while(!cursor.isAfterLast()) {
 			double lat = cursor.getDouble(cursor.getColumnIndex(DBHelper.LAT));
 			double lng = cursor.getDouble(cursor.getColumnIndex(DBHelper.LNG));
-			locations.add(new LatLng(lat, lng));
+			long timestamp = cursor.getLong(cursor.getColumnIndex(DBHelper.TIMESTAMP));
+			
+			locations.add(new LocationStat(lat, lng, timestamp));
 			cursor.moveToNext();
 		}
 		cursor.close();
@@ -96,22 +97,6 @@ public class Database {
 	}
 	
 	/*
-	 * Update the stats table with the actual stats from
-	 * the run after the run is complete
-	 */
-	public int updateStats(int statsID, String pace, double distance, String time) {
-		ContentValues values = new ContentValues();
-		values.put(DBHelper.PACE, pace);
-		values.put(DBHelper.DISTANCE, distance);
-		values.put(DBHelper.TIME, time);
-		String whereClause = "where " + DBHelper.STATS_ID + " = ?";
-		String[] whereArgs = new String[]{String.valueOf(statsID)};
-		int rowsChanged = db.update(DBHelper.STATS_TABLE, values, whereClause, whereArgs);
-		return rowsChanged;
-
-	}
-	
-	/*
 	 * Create a new entry in the Stats table and return its ID
 	 */
 	public long addRunStats(String date, String pace, double distance, String time) {
@@ -128,15 +113,19 @@ public class Database {
 	/*
 	 * Insert a location into the database
 	 */
-	public void insertLocation(long statsID, double lat, double lng) {
+	public void insertLocation(long statsID, double lat, double lng, long time) {
+		System.out.println(statsID);
+		System.out.println(lat);
+		System.out.println(lng);
+		System.out.println(time);
 		
 		ContentValues values = new ContentValues();
 		values.put(DBHelper.STATS_ID, statsID);
 		values.put(DBHelper.LAT, lat);
 		values.put(DBHelper.LNG, lng);
+		values.put(DBHelper.TIMESTAMP, time);
 		
 		@SuppressWarnings("unused")
 		Long id = db.insert(DBHelper.LOC_TABLE, null, values);
 	}
-
 }

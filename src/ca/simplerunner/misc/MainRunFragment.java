@@ -2,7 +2,6 @@ package ca.simplerunner.misc;
 
 import ca.simplerunner.R;
 import ca.simplerunner.app.Main;
-import ca.simplerunner.app.RunStat;
 import ca.simplerunner.app.RunView;
 import ca.simplerunner.database.Database;
 import android.os.Bundle;
@@ -71,7 +70,7 @@ public class MainRunFragment extends Fragment {
 	/*
 	 * Format run time from milliseconds
 	 */
-	public String formatTime(String timeStr) {
+	public static String formatTime(String timeStr) {
 		long time = Long.valueOf(timeStr);
 		long milHours = 3600000;
 		long milMins = 60000;

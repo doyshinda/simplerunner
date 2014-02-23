@@ -1,139 +1,159 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/gray">
+    android:layout_height="match_parent" >
 
-    <TextView
-        android:id="@+id/dateHeader"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="20dp"
-        android:text="@string/date"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-    
-    <TextView
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/dateHeader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="15dp"
+            android:text="@string/date"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        <TextView
             android:id="@+id/headerDivider"
             android:layout_width="fill_parent"
             android:layout_height="1dp"
             android:layout_marginTop="20dp"
             android:background="@color/black" />
 
-    <LinearLayout 
-        android:layout_width="match_parent"
-        android:layout_height="fill_parent"
-        android:orientation="horizontal">
-
         <LinearLayout
-            android:id="@+id/column1"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="left"
-            android:layout_weight="1"
-            android:gravity="left"
-            android:orientation="vertical" >
-
-            <TextView
-                android:id="@+id/timeHeader"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:background="@color/blue2"
-                android:gravity="center"
-                android:text="@string/timeHeader"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="@color/black" />
-
-            <TextView
-                android:id="@+id/tmeField"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="25dp"
-                android:text="Large Text"
-                android:layout_gravity="center"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
-
-            <TextView
-                android:id="@+id/paceHeader"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="25dp"
-                android:background="@color/blue2"
-                android:gravity="center"
-                android:text="@string/avgPace"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="@color/black" />
-
-            <TextView
-                android:id="@+id/avgPaceField"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="25dp"
-                android:text="Large Text"
-                android:layout_gravity="center"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
-            
-        </LinearLayout>
-
-        <TextView
-            android:id="@+id/columnDivider"
-            android:layout_width="1dp"
+            android:layout_width="match_parent"
             android:layout_height="fill_parent"
-            android:background="@color/black" />
+            android:orientation="horizontal" >
 
-        <LinearLayout
-            android:id="@+id/column2"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="right"
-            android:layout_weight="1"
-            android:orientation="vertical" >
+            <LinearLayout
+                android:id="@+id/column1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="left"
+                android:layout_weight="1"
+                android:gravity="left"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:id="@+id/timeHeader"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:background="@color/blue2"
+                    android:gravity="center"
+                    android:text="@string/timeHeader"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@color/black" />
+
+                <TextView
+                    android:id="@+id/tmeField"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="25dp"
+                    android:text="Large Text"
+                    android:textAppearance="?android:attr/textAppearanceLarge" />
+
+                <TextView
+                    android:id="@+id/c1Divider"
+                    android:layout_width="fill_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="25dp"
+                    android:background="@color/black" />
+
+                <TextView
+                    android:id="@+id/paceHeader"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:background="@color/blue2"
+                    android:gravity="center"
+                    android:text="@string/avgPace"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@color/black" />
+
+                <TextView
+                    android:id="@+id/avgPaceField"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="25dp"
+                    android:text="Large Text"
+                    android:textAppearance="?android:attr/textAppearanceLarge" />
+            </LinearLayout>
 
             <TextView
-                android:id="@+id/distHeader"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:background="@color/blue2"
-                android:gravity="center"
-                android:text="@string/distHeader"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="@color/black" />
+                android:id="@+id/columnDivider"
+                android:layout_width="1dp"
+                android:layout_height="fill_parent"
+                android:background="@color/black" />
 
-            <TextView
-                android:id="@+id/distField"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Large Text"
-                android:layout_gravity="center"
-                android:layout_marginTop="25dp"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
+            <LinearLayout
+                android:id="@+id/column2"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="right"
+                android:layout_weight="1"
+                android:orientation="vertical" >
 
-            <TextView
-                android:id="@+id/speedHeader"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="25dp"
-                android:background="@color/blue2"
-                android:gravity="center"
-                android:text="@string/avgSpeed"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="@color/black" />
+                <TextView
+                    android:id="@+id/distHeader"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:background="@color/blue2"
+                    android:gravity="center"
+                    android:text="@string/distHeader"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@color/black" />
 
-            <TextView
-                android:id="@+id/avgSpeedField"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Large Text"
-                android:layout_gravity="center"
-                android:layout_marginTop="25dp"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
-            
+                <TextView
+                    android:id="@+id/distField"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="25dp"
+                    android:text="Large Text"
+                    android:textAppearance="?android:attr/textAppearanceLarge" />
+
+                <TextView
+                    android:id="@+id/c2Divider"
+                    android:layout_width="fill_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="25dp"
+                    android:background="@color/black" />
+
+                <TextView
+                    android:id="@+id/speedHeader"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:background="@color/blue2"
+                    android:gravity="center"
+                    android:text="@string/avgSpeed"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@color/black" />
+
+                <TextView
+                    android:id="@+id/avgSpeedField"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="25dp"
+                    android:text="Large Text"
+                    android:textAppearance="?android:attr/textAppearanceLarge" />
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
+    
+    <TextView
+        android:layout_width="15dp"
+        android:layout_height="fill_parent"
+        android:layout_gravity="right"
+        android:background="@drawable/fadebgright" />
 
-</LinearLayout>
+</FrameLayout>

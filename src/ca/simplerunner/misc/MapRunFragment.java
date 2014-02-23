@@ -9,7 +9,6 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.PolylineOptions;
 
 import ca.simplerunner.R;
-import ca.simplerunner.app.RunStat;
 import ca.simplerunner.app.RunView;
 import ca.simplerunner.database.Database;
 import android.os.Bundle;
@@ -52,7 +51,11 @@ public class MapRunFragment extends Fragment {
 	 * Plot the run on the Map
 	 */
 	public void setUpMap() {
-		ArrayList<LatLng> coords = db.getRunCoordinates(runID);
+		ArrayList<LocationStat> locStats = db.getRunCoordinates(runID);
+		ArrayList<LatLng> coords = new ArrayList<LatLng>();
+		for(LocationStat ls : locStats) {
+			coords.add(new LatLng(ls.getLat(), ls.getLng()));
+		}
 		PolylineOptions opts = new PolylineOptions();
 		opts.width(10);
 		opts.addAll(coords);

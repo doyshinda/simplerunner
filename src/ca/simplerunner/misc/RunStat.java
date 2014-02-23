@@ -1,4 +1,4 @@
-package ca.simplerunner.app;
+package ca.simplerunner.misc;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

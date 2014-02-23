@@ -177,6 +177,7 @@ LocationListener, GpsStatus.Listener {
 	private void initLogging() {
 		//Wait for the GPS to connect
 		if(!logging) {
+			gpsConnected = true;
 			final ProgressDialog progress = new ProgressDialog(Main.this);
 			progress.setTitle("Waiting for GPS");
 			progress.setMessage("Waiting for GPS connection to be established.");
@@ -235,13 +236,16 @@ LocationListener, GpsStatus.Listener {
 		String date = new Date().toString();
 		if(!pace.contentEquals("00:00")) {
 			final long statsID = db.addRunStats(date, pace, distance, Long.toString(runLength));
-			new Thread(new Runnable() {
-				public void run() {
-					for(Location l : locations) {
-						db.insertLocation(statsID, l.getLatitude(), l.getLongitude());
-					}
-				}
-			}).start();	
+//			new Thread(new Runnable() {
+//				public void run() {
+//					for(Location l : locations) {
+//						db.insertLocation(statsID, l.getLatitude(), l.getLongitude(), l.getTime());
+//					}
+//				}
+//			}).start();	
+			for(Location l : locations) {
+				db.insertLocation(statsID, l.getLatitude(), l.getLongitude(), l.getTime());
+			}
 			reset();
 			loadRunViewActivity(statsID);
 		}
@@ -383,6 +387,7 @@ LocationListener, GpsStatus.Listener {
 	 */
 	@Override
 	public void onConnected(Bundle connectionHint) {
+		locationClient.setMockMode(true);
 		locationClient.requestLocationUpdates(REQUEST, this);
 	}
 
