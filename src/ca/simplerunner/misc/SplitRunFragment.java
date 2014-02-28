@@ -65,7 +65,6 @@ public class SplitRunFragment extends Fragment {
 	 */
 	private ArrayList<SplitStat> createSplits(ArrayList<LocationStat> locStats) {
 		ArrayList<SplitStat> splitStats = new ArrayList<SplitStat>();
-
 		double prevLat = locStats.get(0).getLat();
 		double prevLng = locStats.get(0).getLng();
 		long prevTime = locStats.get(0).getTimestamp();
@@ -85,7 +84,6 @@ public class SplitRunFragment extends Fragment {
 				km += 1;
 				distance = distance - 1000;
 				long splitLength = locStats.get(i).getTimestamp() - prevTime;
-				System.out.println(splitLength);
 				totalTime += splitLength;
 				String timeStr = formatSplitTime(splitLength);
 				splitStats.add(new SplitStat(km, timeStr));

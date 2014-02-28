@@ -54,7 +54,7 @@ LocationListener, GpsStatus.Listener {
 	private LocationManager locationManager;
 	private LocationClient locationClient;
 	private ArrayList<Location> locations;
-	private Location prev;
+	private Location prevLoc;
 	private GoogleMap map;
 
 	private TextView gpsStatus;
@@ -66,6 +66,7 @@ LocationListener, GpsStatus.Listener {
 	private boolean gpsConnected = false;
 	private boolean logging = false;
 	private long startTime = 0;
+	private long prevTime = 0;
 	private long delta = 0;
 	private double distance = 0.0;
 	private String pace = "00:00";
@@ -73,7 +74,7 @@ LocationListener, GpsStatus.Listener {
 
 	// These settings will get updates at the maximal rates currently possible.
 	private static final LocationRequest REQUEST = LocationRequest.create()
-			.setInterval(5000)         // 5 seconds
+			.setInterval(4000)         // 4 seconds
 			.setFastestInterval(16)    // 16ms = 60fps
 			.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 
@@ -81,7 +82,7 @@ LocationListener, GpsStatus.Listener {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
-		db = new Database(this);
+		initDB();
 		locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 		locationManager.addGpsStatusListener(this);
 		results = new float[1];
@@ -94,6 +95,7 @@ LocationListener, GpsStatus.Listener {
 	public void onResume() {
 		super.onResume();
 		gpsOn();
+		initDB();
 	}
 
 	/*
@@ -241,13 +243,25 @@ LocationListener, GpsStatus.Listener {
 		long runLength = SystemClock.elapsedRealtime() - startTime;
 		logging = false;
 		String date = new Date().toString();
-		if(!pace.contentEquals("00:00")) {
-			long statsID = db.addRunStats(date, pace, distance, Long.toString(runLength));
-			for(Location l : locations) {
-				db.insertLocation(statsID, l.getLatitude(), l.getLongitude(), l.getTime());
-			}
-			reset();
-			loadRunViewActivity(statsID);
+		if(!pace.contentEquals("00:00") && (locations.size() > 0)) {
+			final long statsID = db.addRunStats(date, pace, distance, Long.toString(runLength));
+			final ProgressDialog progress = new ProgressDialog(Main.this);
+			progress.setTitle("Saving Run");
+			progress.setCancelable(false);
+			progress.setMessage("Saving your run information...");
+			progress.show();
+			new Thread(new Runnable() {
+				public void run() {
+					Database db = new Database(Main.this);
+					db.batchInsertLocations(statsID, locations);
+					db.closeDB();
+					runOnUiThread(new Runnable() {
+						public void run() {
+							loadRunViewActivity(statsID, progress);
+						}
+					});
+				}
+			}).start();
 		}
 		reset();
 	}
@@ -255,8 +269,10 @@ LocationListener, GpsStatus.Listener {
 	/*
 	 * Load View Run
 	 */
-	public void loadRunViewActivity(long runID) {
-		db.closeDB();
+	public void loadRunViewActivity(long runID, ProgressDialog progress) {
+		reset();
+		progress.hide();
+		closeDB();
 		Intent i = new Intent(Main.this, RunView.class);
 		i.putExtra("runID", runID);
 		startActivity(i);
@@ -268,7 +284,7 @@ LocationListener, GpsStatus.Listener {
 	public void reset() {
 		delta = 0;
 		distance = 0.0;
-		prev = null;
+		prevLoc = null;
 		pace = "00:00";
 		timer.setText(this.getResources().getString(R.string.zeroTime));
 		distanceField.setText(this.getResources().getString(R.string.zeroDistance));
@@ -363,13 +379,13 @@ LocationListener, GpsStatus.Listener {
 		// Calculate distance run
 		new Thread(new Runnable() {
 			public void run() {
-				if(prev != null) {
-					Location.distanceBetween(prev.getLatitude(), prev.getLongitude(),
+				if(prevLoc != null) {
+					Location.distanceBetween(prevLoc.getLatitude(), prevLoc.getLongitude(),
 							loc.getLatitude(), loc.getLongitude(), results);
 					distance += results[0];
 				}
-				prev = loc;
-				final double speed = calculateSpeed();
+				prevLoc = loc;
+				final double speed = calculateSpeed(results[0], loc.getTime());
 				pace = calculatePace(speed);
 				runOnUiThread(new Runnable() {
 					public void run() {
@@ -379,7 +395,7 @@ LocationListener, GpsStatus.Listener {
 					}
 				});
 			}
-		}).start();		
+		}).start();
 	}
 
 	/*
@@ -415,13 +431,18 @@ LocationListener, GpsStatus.Listener {
 	}
 
 	/*
-	 * Calculates the speed based on time running and distance
+	 * Calculates the speed based on time and distance since
+	 * the previous location
 	 */
-	private double calculateSpeed() {
-		long currTime = SystemClock.elapsedRealtime();
-		long delta = currTime - startTime;
-		double speed = (distance * 3600)/delta;
-		return speed;
+	private double calculateSpeed(float distance, long time) {
+		if(prevTime != 0) {
+			long delta = time - prevTime;
+			double speed = (distance * 3600)/delta;
+			prevTime = time;
+			return speed;
+		}
+		prevTime = time;
+		return 0;
 	}
 
 	/*
@@ -443,12 +464,16 @@ LocationListener, GpsStatus.Listener {
 	}
 
 	/*
-	 * Calculates the pace based on speed and time
+	 * Calculates the pace based on speed
 	 */
 	private String calculatePace(double speed) {
 		double pace = 1/speed * 60;
 		int minutes = (int) Math.floor(pace);
-		int seconds = (int) ((pace - Math.floor(pace)) * 60);
+		int seconds = (int) ((pace - minutes) * 60);
+		if(minutes > 120) {
+			minutes = 0;
+			seconds = 0;
+		}
 		String paceStr = (Integer.toString(minutes) + ":" + Integer.toString(seconds));
 		return paceStr + " min/km";
 	}
@@ -459,6 +484,22 @@ LocationListener, GpsStatus.Listener {
 	private void loadHistoryActivity() {
 		Intent i = new Intent(Main.this, History.class);
 		startActivity(i);
+	}
+	
+	/*
+	 * Initiate Database
+	 */
+	private void initDB() {
+		if(db == null)
+			db = new Database(this);
+	}
+	
+	/*
+	 * Close Database
+	 */
+	private void closeDB() {
+		db.closeDB();
+		db = null;
 	}
 
 	/*
@@ -474,6 +515,7 @@ LocationListener, GpsStatus.Listener {
 	 * Shut down app
 	 */
 	public void quitApp() {
+		closeDB();
 		this.finish();
 		Process.killProcess(Process.myPid());
 	}

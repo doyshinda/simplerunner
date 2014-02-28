@@ -9,6 +9,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.location.Location;
 
 
 /**
@@ -114,10 +115,6 @@ public class Database {
 	 * Insert a location into the database
 	 */
 	public void insertLocation(long statsID, double lat, double lng, long time) {
-		System.out.println(statsID);
-		System.out.println(lat);
-		System.out.println(lng);
-		System.out.println(time);
 		
 		ContentValues values = new ContentValues();
 		values.put(DBHelper.STATS_ID, statsID);
@@ -127,5 +124,17 @@ public class Database {
 		
 		@SuppressWarnings("unused")
 		Long id = db.insert(DBHelper.LOC_TABLE, null, values);
+	}
+	
+	/*
+	 * Batch insert locations into the database
+	 */
+	public void batchInsertLocations(long statsID, ArrayList<Location> locations) {
+		db.beginTransaction();
+		for(Location loc : locations) {
+			insertLocation(statsID, loc.getLatitude(), loc.getLongitude(), loc.getTime());
+		}
+		db.setTransactionSuccessful();
+		db.endTransaction();
 	}
 }
