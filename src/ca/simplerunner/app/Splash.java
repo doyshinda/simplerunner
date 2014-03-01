@@ -8,19 +8,17 @@ import android.os.Handler;
 
 /**
  * Splash screen activity class. The first thing the user sees.
+ * Downloads information in the background while the screen loads.
  * 
  * @author Abe Friesen
- * 
  */
 public class Splash extends Activity {
-	
-	private static int TIME_OUT = 3000;
-	
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.splash);
-		displayLogo(TIME_OUT);
+		displayLogo(1000);
 	}
 
 	private void displayLogo(long time) {
@@ -34,7 +32,7 @@ public class Splash extends Activity {
 	}
 
 	/*
-	 * Start Main Activity
+	 * Start Filter Activity
 	 */
 	private void startMainActivity() {
 		Intent i = new Intent(Splash.this, Main.class);

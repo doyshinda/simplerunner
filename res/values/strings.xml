@@ -16,11 +16,13 @@
     <string name="distance">Distance</string>
     <string name="GPSoff">GPS Not Connected</string>
     <string name="GPSon">GPS Connected</string>
-    <string name="distHeader">DISTANCE</string>
-    <string name="timeHeader">TIME</string>
-    <string name="avgPace">AVG PACE</string>
-    <string name="avgSpeed">AVG SPEED</string>
+    <string name="distHeader">Distance</string>
+    <string name="timeHeader">Time</string>
+    <string name="avgPace">Avg Pace</string>
+    <string name="avgSpeed">Avg Speed</string>
     <string name="date">date</string>
-    <string name="kmHeader">KM</string>
-    <string name="splitTimeHeader">Split Time</string>
+    <string name="kmHeader">Split\n(Km)</string>
+    <string name="splitTimeHeader">Time\n(minutes)</string>
+    <string name="splitSpeedHeader">Speed\n(km/h)</string>
+    <string name="description">Simple Runner</string>
 </resources>

@@ -65,7 +65,7 @@ public class Database {
 	 */
 	public ArrayList<RunStat> getRunStats() {
 		Cursor cursor = db.query(DBHelper.STATS_TABLE, new String[]{DBHelper.DATETIME, DBHelper.STATS_ID, DBHelper.PACE,
-				DBHelper.DISTANCE, DBHelper.TIME}, null, null, null, null, DBHelper.STATS_ID + " DESC", "10");
+				DBHelper.DISTANCE, DBHelper.TIME}, null, null, null, null, DBHelper.STATS_ID + " DESC", null);
 		ArrayList<RunStat> results = new ArrayList<RunStat>();
 		cursor.moveToFirst();
 		while(!cursor.isAfterLast()) {

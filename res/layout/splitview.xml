@@ -49,6 +49,17 @@
                 android:text="@string/splitTimeHeader"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColorHint="@color/black" />
+            
+            <TextView
+                android:id="@+id/splitSpeedHeader"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@color/blue2"
+                android:gravity="center|center_vertical"
+                android:text="@string/splitSpeedHeader"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColorHint="@color/black" />
         </LinearLayout>
 
         <TextView

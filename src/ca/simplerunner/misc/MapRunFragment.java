@@ -68,7 +68,7 @@ public class MapRunFragment extends Fragment {
 //		opts.color(getResources().getColor(R.color.blue2));
 		opts.addAll(coords);
 		int mid = coords.size()/2;
-		map.moveCamera(CameraUpdateFactory.newLatLngZoom(coords.get(mid), 15));
+		map.moveCamera(CameraUpdateFactory.newLatLngZoom(coords.get(mid), 13));
 		map.addPolyline(opts);
 	}
 

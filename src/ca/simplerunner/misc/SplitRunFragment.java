@@ -86,7 +86,9 @@ public class SplitRunFragment extends Fragment {
 				long splitLength = locStats.get(i).getTimestamp() - prevTime;
 				totalTime += splitLength;
 				String timeStr = formatSplitTime(splitLength);
-				splitStats.add(new SplitStat(km, timeStr));
+				String avgSpeed = MainRunFragment.calcAvgSpeed(Long.toString(splitLength),
+						distance + 1000);
+				splitStats.add(new SplitStat(km, timeStr, avgSpeed.replace(" km/h", "")));
 				prevTime = locStats.get(i).getTimestamp();
 			}
 		}
@@ -97,8 +99,10 @@ public class SplitRunFragment extends Fragment {
 			long time = Long.valueOf(stat.getTime());
 			splitLength += (time - totalTime);
 			String timeStr = formatSplitTime(splitLength);
+			String avgSpeed = MainRunFragment.calcAvgSpeed(Long.toString(splitLength),
+					distance);
 			double lastKM = formatLastSplit(distance) + km;
-			splitStats.add(new SplitStat(lastKM, timeStr));
+			splitStats.add(new SplitStat(lastKM, timeStr, avgSpeed.replace(" km/h", "")));
 		}
 
 		return splitStats;
@@ -136,10 +140,12 @@ public class SplitRunFragment extends Fragment {
 
 		double km;
 		String split;
+		String avgSpeed;
 
-		public SplitStat(double km, String split) {
+		public SplitStat(double km, String split, String avgSpeed) {
 			this.km = km;
 			this.split = split;
+			this.avgSpeed = avgSpeed;
 		}
 
 		public double getkm() {
@@ -148,6 +154,10 @@ public class SplitRunFragment extends Fragment {
 
 		public String getSplit() {
 			return this.split;
+		}
+		
+		public String getAvgSpeed() {
+			return this.avgSpeed;
 		}
 	}
 
@@ -176,9 +186,11 @@ public class SplitRunFragment extends Fragment {
 
 			TextView kmText = (TextView) layout.findViewById(R.id.km);
 			TextView splitText = (TextView) layout.findViewById(R.id.splitTime);
+			TextView avgSpeedText = (TextView) layout.findViewById(R.id.avgSpeedList);
 
 			kmText.setText(String.valueOf(stat.getkm()));
 			splitText.setText(stat.getSplit());
+			avgSpeedText.setText(stat.getAvgSpeed());
 
 			return layout;
 		}

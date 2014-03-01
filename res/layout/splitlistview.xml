@@ -23,5 +23,15 @@
         android:layout_weight="1"
         android:gravity="center|center_vertical"
         android:textSize="20sp" />
+    
+    <TextView
+        android:id="@+id/avgSpeedList"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="15dp"
+        android:layout_weight="1"
+        android:gravity="center|center_vertical"
+        android:textSize="20sp" />
 
 </LinearLayout>

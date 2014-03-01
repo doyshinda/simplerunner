@@ -63,7 +63,7 @@ public class MainRunFragment extends Fragment {
 	/*
 	 * Calculate the average speed
 	 */
-	public String calcAvgSpeed(String time, double distance) {
+	public static String calcAvgSpeed(String time, double distance) {
 		double speed = (distance * 3600)/Double.valueOf(time);
 		return Main.formatSpeed(speed);
 	}
@@ -109,11 +109,14 @@ public class MainRunFragment extends Fragment {
 	 	}
 	 	String minColon = ":";
 	 	String secColon = ":";
-	 	if(minutes < 10) {
-	 		minColon = ":0";
-	 	}
 	 	if(seconds < 10) {
 	 		secColon = ":0";
+	 	}
+	 	if(minutes < 10 && hours == 0) {
+	 		return minutes + secColon + seconds;
+	 	}
+	 	if(minutes < 10) {
+	 		minColon = ":0";
 	 	}
 	 	return hours + minColon + minutes + secColon + seconds;
 	}
