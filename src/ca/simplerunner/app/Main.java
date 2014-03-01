@@ -72,10 +72,10 @@ LocationListener, GpsStatus.Listener {
 	private String pace = "00:00";
 	private float[] results;
 
-	// These settings will get updates at the maximal rates currently possible.
+	// Location Request settings
 	private static final LocationRequest REQUEST = LocationRequest.create()
-			.setInterval(4000)         // 4 seconds
-			.setFastestInterval(16)    // 16ms = 60fps
+			.setInterval(4000)
+			.setFastestInterval(1000)
 			.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 
 	@Override
