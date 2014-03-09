@@ -66,7 +66,6 @@ LocationListener, GpsStatus.Listener {
 	private boolean gpsConnected = false;
 	private boolean logging = false;
 	private long startTime = 0;
-	private long prevTime = 0;
 	private long delta = 0;
 	private double distance = 0.0;
 	private String pace = "00:00";
@@ -129,7 +128,7 @@ LocationListener, GpsStatus.Listener {
 	private void init() {
 		Button startButton = (Button) findViewById(R.id.startButton);
 		Button stopButton = (Button) findViewById(R.id.stopButton);
-		Button pauseButton = (Button) findViewById(R.id.pauseButton);
+//		Button pauseButton = (Button) findViewById(R.id.pauseButton);
 		gpsStatus = (TextView) findViewById(R.id.GPSstatus);
 		paceField = (TextView) findViewById(R.id.paceField);
 		speedField = (TextView) findViewById(R.id.speedField);
@@ -155,12 +154,12 @@ LocationListener, GpsStatus.Listener {
 			}
 		});
 
-		pauseButton.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View arg0) {
-				pauseLogging();
-			}
-		});
+//		pauseButton.setOnClickListener(new View.OnClickListener() {
+//			@Override
+//			public void onClick(View arg0) {
+//				pauseLogging();
+//			}
+//		});
 	}
 
 	/*
@@ -227,12 +226,12 @@ LocationListener, GpsStatus.Listener {
 	/*
 	 * Pause logging GPS coordinates
 	 */
-	private void pauseLogging() {
-		timer.stop();
-		logging = false;
-		long currTime = SystemClock.elapsedRealtime();
-		delta = currTime - startTime;
-	}
+//	private void pauseLogging() {
+//		timer.stop();
+//		logging = false;
+//		long currTime = SystemClock.elapsedRealtime();
+//		delta = currTime - startTime;
+//	}
 
 	/*
 	 * Stop logging GPS coordinates and store the information
@@ -385,7 +384,7 @@ LocationListener, GpsStatus.Listener {
 					distance += results[0];
 				}
 				prevLoc = loc;
-				final double speed = calculateSpeed(results[0], loc.getTime());
+				final double speed = calculateSpeed();
 				pace = calculatePace(speed);
 				runOnUiThread(new Runnable() {
 					public void run() {
@@ -434,15 +433,11 @@ LocationListener, GpsStatus.Listener {
 	 * Calculates the speed based on time and distance since
 	 * the previous location
 	 */
-	private double calculateSpeed(float distance, long time) {
-		if(prevTime != 0) {
-			long delta = time - prevTime;
-			double speed = (distance * 3600)/delta;
-			prevTime = time;
-			return speed;
-		}
-		prevTime = time;
-		return 0;
+	private double calculateSpeed() {
+		long currTime = SystemClock.elapsedRealtime();
+		long delta = currTime - startTime;
+		double speed = (distance * 3600)/delta;
+		return speed;
 	}
 
 	/*

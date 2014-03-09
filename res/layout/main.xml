@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content" >
-    
+
     <TextView
         android:id="@+id/GPSstatus"
         android:layout_width="fill_parent"
@@ -18,7 +18,7 @@
         android:layout_height="1dp"
         android:layout_below="@+id/GPSstatus"
         android:background="@color/black" />
-    
+
     <LinearLayout
         android:id="@+id/stats"
         android:layout_width="match_parent"
@@ -43,8 +43,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:background="@color/blue2"
-                android:text="@string/pace"
                 android:gravity="center"
+                android:text="@string/pace"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <TextView
@@ -58,12 +58,12 @@
                 android:text="@string/zeroPace"
                 android:textColor="@color/black"
                 android:textSize="15sp" />
-            
+
             <TextView
-		        android:id="@+id/c1Divider"
-		        android:layout_width="fill_parent"
-		        android:layout_height="1dp"
-		        android:background="@color/black" />
+                android:id="@+id/c1Divider"
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:background="@color/black" />
 
             <TextView
                 android:id="@+id/time"
@@ -83,15 +83,30 @@
                 android:layout_marginBottom="12dp"
                 android:layout_marginTop="12dp"
                 android:format="%s:%s"
-                android:gravity="center" />
+                android:gravity="center"
+                android:textSize="15sp" />
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:background="@color/black" />
+
+            <Button
+                android:id="@+id/startButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"
+                android:text="@string/start" />
 
         </LinearLayout>
-        
+
         <TextView
-	        android:id="@+id/columnDivider"
-	        android:layout_width="1dp"
-	        android:layout_height="fill_parent"
-	        android:background="@color/black" />
+            android:id="@+id/columnDivider"
+            android:layout_width="1dp"
+            android:layout_height="fill_parent"
+            android:background="@color/black" />
 
         <LinearLayout
             android:id="@+id/column2"
@@ -106,9 +121,9 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:text="@string/speed"
                 android:background="@color/blue2"
                 android:gravity="center"
+                android:text="@string/speed"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <TextView
@@ -122,12 +137,12 @@
                 android:text="@string/zeroSpeed"
                 android:textColor="@color/black"
                 android:textSize="15sp" />
-            
+
             <TextView
-		        android:id="@+id/c2Divider"
-		        android:layout_width="fill_parent"
-		        android:layout_height="1dp"
-		        android:background="@color/black" />
+                android:id="@+id/c2Divider"
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:background="@color/black" />
 
             <TextView
                 android:id="@+id/distance"
@@ -149,68 +164,37 @@
                 android:text="@string/zeroDistance"
                 android:textColor="@color/black"
                 android:textSize="15sp" />
+            
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:background="@color/black" />
+
+            <Button
+                android:id="@+id/stopButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"
+                android:text="@string/stop" />
 
         </LinearLayout>
-        
     </LinearLayout>
-    
-    <TextView
-        android:id="@+id/buttonDivider"
-        android:layout_width="fill_parent"
-        android:layout_height="1dp"
-        android:layout_below="@+id/stats"
-        android:background="@color/black" />
-    
-    <RelativeLayout
-        android:id="@+id/buttonLayout"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/buttonDivider"
-        android:background="@color/white"
-        android:orientation="horizontal"
-        android:paddingBottom="5dp"
-        android:paddingTop="5dp" >
-        
-        <Button
-            android:id="@+id/stopButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="false"
-            android:layout_alignParentLeft="true"
-            android:layout_marginLeft="10dp"
-            android:text="@string/stop" />
 
-	    <Button
-	        android:id="@+id/startButton"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:layout_centerInParent="true"
-	        android:shadowDx="20"
-	        android:text="@string/start" />
-	
-	    <Button
-	        android:id="@+id/pauseButton"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:layout_alignParentRight="true"
-	        android:layout_marginRight="10dp"
-	        android:text="@string/pause" />
-    
-    </RelativeLayout>
-    
     <TextView
         android:id="@+id/mapDivider"
         android:layout_width="fill_parent"
         android:layout_height="1dp"
-        android:layout_below="@+id/buttonLayout"
+        android:layout_below="@+id/stats"
         android:background="@color/black" />
 
     <fragment
         android:id="@+id/map"
         android:layout_width="match_parent"
         android:layout_height="248dp"
-        android:layout_below="@+id/mapDivider"
         android:layout_alignParentBottom="true"
+        android:layout_below="@+id/mapDivider"
         class="com.google.android.gms.maps.MapFragment" />
 
 </RelativeLayout>
