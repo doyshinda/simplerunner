@@ -93,8 +93,19 @@ LocationListener, GpsStatus.Listener {
 	@Override
 	public void onResume() {
 		super.onResume();
+		if(!locationClient.isConnected() && !locationClient.isConnecting()) {
+			locationClient.connect();
+		}
 		gpsOn();
 		initDB();
+	}
+	
+	@Override
+	public void onPause() {
+		super.onPause();
+		if(!logging && locationClient.isConnected()) {
+			locationClient.disconnect();
+		}
 	}
 
 	/*
@@ -410,7 +421,7 @@ LocationListener, GpsStatus.Listener {
 	 */
 	@Override
 	public void onDisconnected() {
-		// Nothing to do here
+		locationClient.removeLocationUpdates(this);
 	}
 
 	/*

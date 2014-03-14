@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.PolylineOptions;
 
@@ -65,11 +66,25 @@ public class MapRunFragment extends Fragment {
 		}
 		PolylineOptions opts = new PolylineOptions();
 		opts.width(3);
-//		opts.color(getResources().getColor(R.color.blue2));
 		opts.addAll(coords);
 		int mid = coords.size()/2;
 		map.moveCamera(CameraUpdateFactory.newLatLngZoom(coords.get(mid), 13));
 		map.addPolyline(opts);
+		CircleOptions circle = new CircleOptions();
+		circle.center(coords.get(0));
+		circle.radius(3);
+		circle.strokeColor(getResources().getColor(R.color.green));
+		circle.fillColor(getResources().getColor(R.color.green));
+		circle.zIndex(20);
+		map.addCircle(circle);
+		circle = new CircleOptions();
+		circle.center(coords.get(coords.size() - 1));
+		circle.radius(3);
+		circle.fillColor(getResources().getColor(R.color.red));
+		circle.strokeColor(getResources().getColor(R.color.red));
+		circle.zIndex(20);
+		map.addCircle(circle);
+		
 	}
 
 	/*
